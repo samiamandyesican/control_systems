@@ -12,25 +12,26 @@
         "plaintext": false
     },
     // Copilot Chat settings to encourage learning
-    "github.copilot.chat.codeGeneration.instructions": [
-        {
-            "text": "For student assignments (hw* directories), provide guidance and hints rather than complete solutions. Ask clarifying questions about their understanding first."
-        },
-        {
-            "text": "For TODO markers in student code, suggest the next logical step or provide a 1-2 line hint, not a complete implementation."
-        },
-        {
-            "text": "When students ask to 'complete this file' or 'solve this problem', respond with 'I can help you work through this step-by-step. What part are you working on?' instead of providing the complete solution."
-        },
-        {
-            "text": "Point students to reference implementations (A_arm, B_pendulum, C_satellite) and templates rather than writing code for them."
-        }
-    ],
+    // "github.copilot.chat.codeGeneration.instructions": [
+    //     {
+    //         "text": "For student assignments (hw* directories), provide guidance and hints rather than complete solutions. Ask clarifying questions about their understanding first."
+    //     },
+    //     {
+    //         "text": "For TODO markers in student code, suggest the next logical step or provide a 1-2 line hint, not a complete implementation."
+    //     },
+    //     {
+    //         "text": "When students ask to 'complete this file' or 'solve this problem', respond with 'I can help you work through this step-by-step. What part are you working on?' instead of providing the complete solution."
+    //     },
+    //     {
+    //         "text": "Point students to reference implementations (A_arm, B_pendulum, C_satellite) and templates rather than writing code for them."
+    //     }
+    // ],
     // Python Settings
     // ---------------------------------------------------------------------------
     "python.analysis.typeCheckingMode": "basic",
     "python.analysis.autoImportCompletions": true,
     "python.analysis.completeFunctionParens": true,
+    "python-envs.defaultEnvManager": "ms-python.python:venv",
     // Editor Settings
     // ---------------------------------------------------------------------------
     "problems.showCurrentInStatus": true,

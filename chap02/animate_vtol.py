@@ -1,0 +1,40 @@
+# 3rd-party
+import numpy as np
+
+# local (controlbook)
+from case_studies import common, F_vtol
+
+# alias for parameters
+P = F_vtol.params
+
+# initialize signals for generating data
+z_v_gen = common.SignalGenerator(amplitude=1, frequency=0.1)
+h_gen = common.SignalGenerator(amplitude=1, frequency=0.2)
+theta_gen = common.SignalGenerator(amplitude=2, frequency=1)
+
+# initalize data storage
+# initial conditions
+x0 = np.array([P.z_v0, P.h0, P.theta0, P.z_vdot0, P.hdot0, P.thetadot0])
+x_hist = [x0]
+u_hist = []
+
+# loop over time
+time = np.arange(start=0, stop=20, step=P.ts, dtype=np.float64) # type: ignore
+for t in time[1:]:
+    # generate fake state and input data
+    x = np.zeros_like(x0, dtype=np.float64)
+    x[0] = z_v_gen.sin(t)
+    x[1] = h_gen.sin(t)
+    x[2] = theta_gen.sin(t)
+    x[3:] = [z_v_gen.sin(t), z_v_gen.sin(t), z_v_gen.sin(t)]
+
+    u = np.array([z_v_gen.sin(t), z_v_gen.sin(t)])
+
+    x_hist.append(x)
+    u_hist.append(u)
+
+x_hist = np.array(x_hist)
+u_hist = np.array(u_hist)
+
+viz = F_vtol.Visualizer(time, x_hist, u_hist)
+viz.animate()

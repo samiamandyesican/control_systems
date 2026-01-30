@@ -14,7 +14,7 @@ x_hist = [arm.state]
 u_hist = []
 
 # loop over time
-time = np.arange(start=0.0, stop=50.0, step=A_arm.params.ts, dtype=np.float64)
+time = np.arange(start=0.0, stop=50.0, step=A_arm.params.ts, dtype=np.float64) # type:ignore
 for t in time[1:]:
     # generate input signal
     u = np.array([torque_gen.square(t)])

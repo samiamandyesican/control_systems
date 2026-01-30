@@ -1,25 +1,37 @@
 import numpy as np
 
-# g = 
-# ell1 = 
-# ell2 = 
-# ell3x = 
-# ell3y = 
-# ell3z = 
-# ellT = 
-# d = 
-# m1 = 
-# J1x = 
-# J1y = 
-# J1z = 
-# m2 = 
-# J2x = 
-# J2y = 
-# J2z = 
-# m3 = 
-# J3x = 
-# J3y = 
-# J3z = 
+# time step
+ts = 0.01
+
+# given parameters
+g = 9.81 # m/s
+ell1 = 0.247 # m
+ell2 = -0.039 
+ell3x = -0.007
+ell3y = -0.007
+ell3z = 0.018
+ellT = 0.355
+d = 0.12
+m1 = 0.108862 # kg
+J1x = 0.000189 # kg m^2
+J1y = 0.001953 # kg m^2
+J1z = 0.001894 # kg m^2
+m2 = 0.4717 # kg
+J2x = 0.00231 # kg m^2
+J2y = 0.003274 # kg m^2
+J2z = 0.003416 # kg m^2
+m3 = 0.1905 # kg
+J3x = 0.0002222 # kg m^2
+J3y = 0.0001956 # kg m^2
+J3z = 0.000027 # kg m^2
+
+# initial conditions
+phi0 = 0
+theta0 = 0
+psi0 = 0
+phidot0 = 0
+thetadot0 = 0
+psidot0 = 0
 
 
 ##### Chapter 4

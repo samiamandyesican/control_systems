@@ -19,7 +19,7 @@ x_hist = [x0]
 u_hist = []
 
 # loop over time
-time = np.arange(start=0, stop=20, step=P.ts, dtype=np.float64)
+time = np.arange(start=0, stop=20, step=P.ts, dtype=np.float64) # type: ignore
 for t in time[1:]:
     # generate fake state and input data
     x = np.zeros_like(x0)
