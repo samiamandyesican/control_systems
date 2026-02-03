@@ -7,7 +7,7 @@ def A2E():
     # g = 9.81 # m/s
 
     # define sympy symbols (dependent and independent)
-    t, ell, m_1, m_2, g = sp.symbols(r"t ell m_1 m_2 g")
+    t, ell, m_1, m_2, g = sp.symbols("t ell m_1 m_2 g")
     theta_f, z_f = sp.symbols("theta z", cls=sp.Function) # dependent variables
     theta = theta_f(t)
     z = z_f(t)

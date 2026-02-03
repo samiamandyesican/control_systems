@@ -3,7 +3,7 @@
 from case_studies.common import sym_utils as su
 
 # local imports (from this folder)
-from generate_KE import *
+from .generate_KE import *
 
 # %%[markdown]
 # The code imported from above shows how we defined q, q_dot, and necessary system parameters.
@@ -68,7 +68,7 @@ display(Math(vlatex(thetadd_eom)))
 # OK, now we can get the state variable form of the equations of motion.
 
 # %%
-import params as P
+from . import params as P
 import numpy as np
 
 # defining fixed parameters that are not states or inputs (like g, ell, m, b)

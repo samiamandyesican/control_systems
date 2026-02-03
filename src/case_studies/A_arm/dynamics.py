@@ -40,6 +40,6 @@ class ArmDynamics(DynamicsBase):
     def h(self):
         # return the output equations
         # could also use input u if needed
-        theta = self.state[0]
-        y = np.array([theta])
+        x = self.state[0]
+        y = np.array([x])
         return y
