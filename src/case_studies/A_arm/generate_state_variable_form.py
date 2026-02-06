@@ -30,7 +30,7 @@ L = simplify(K - P)
 
 # %%
 # Solution for Euler-Lagrange equations, but this does not include right-hand side (like friction and tau)
-EL_case_studyA = simplify(diff(diff(L, qdot), t) - diff(L, q))
+EL_case_studyA = simplify(diff(diff(L, qdot), t) - diff(L, q)) # type: ignore
 
 display(Math(vlatex(EL_case_studyA)))
 
@@ -41,7 +41,7 @@ display(Math(vlatex(EL_case_studyA)))
 ############################################################
 
 # these are just convenience variables
-thetad = theta.diff(t)
+thetad = theta.diff(t) # type: ignore
 thetadd = thetad.diff(t)
 
 # defining symbols for external force and friction
@@ -68,11 +68,7 @@ display(Math(vlatex(thetadd_eom)))
 # OK, now we can get the state variable form of the equations of motion.
 
 # %%
-<<<<<<< HEAD
 from . import params as P
-=======
-import case_studies.A_arm.params as P
->>>>>>> d9724c6e1c6e42b8b0f5c058db4ad928c81e9f96
 import numpy as np
 
 # defining fixed parameters that are not states or inputs (like g, ell, m, b)
