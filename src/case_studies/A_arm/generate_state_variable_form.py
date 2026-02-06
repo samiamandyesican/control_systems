@@ -68,7 +68,11 @@ display(Math(vlatex(thetadd_eom)))
 # OK, now we can get the state variable form of the equations of motion.
 
 # %%
+<<<<<<< HEAD
 from . import params as P
+=======
+import case_studies.A_arm.params as P
+>>>>>>> d9724c6e1c6e42b8b0f5c058db4ad928c81e9f96
 import numpy as np
 
 # defining fixed parameters that are not states or inputs (like g, ell, m, b)
@@ -95,8 +99,6 @@ state_dot = sp.Matrix([thetad, thetadd_eom])
 
 
 # %%
-import numpy as np
-
 # converting the function to a callable function that uses numpy to evaluate and
 # return a list of state derivatives
 eom = sp.lambdify([state, ctrl_input, m, ell, b], state_dot, "numpy")
