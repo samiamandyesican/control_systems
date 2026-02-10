@@ -36,7 +36,7 @@ w = sp.Matrix([[0], [0], [sp.diff(theta, t)]])
 KE_c = sp.Rational(1, 2) * m_c * p_c_dot.T * p_c_dot + sp.Rational(1, 2) * w.T * J_c * w
 KE_r = sp.Rational(1, 2) * m_r * p_r_dot.T * p_r_dot
 # KE_l = sp.Rational(1, 2) * m_l * p_l_dot.T * p_l_dot
-KE_l = sp.Rational(1, 2) * m_r * p_l_dot.T * p_l_dot
+KE_l = sp.Rational(1, 2) * m_r * p_l_dot.T * p_l_dot # substituting m_r significantly simplifies
 
 KE = KE_c + KE_r + KE_l
 KE = sp.simplify(KE[0, 0])

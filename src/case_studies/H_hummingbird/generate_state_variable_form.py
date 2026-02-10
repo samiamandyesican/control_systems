@@ -29,18 +29,19 @@ su.enable_printing(__name__ == "__main__")
 # K =
 
 # then make sure to grab just the scalar part of the result
-K = K[0, 0]
+# K = K[0, 0]
 
 
 # TODO: define symbols needed for potential energy and the RHS 
 # (e.g. friction, force_left, force_right, etc.) of the equations 
 # of motion.
-
+g, P_0, d, f_l, f_r, ell_T = dynamicsymbols("g P_0 d f_l f_r ell_T")
 
 # TODO now calculate the potential energy "P"
-# P = 
+PE = m1*g*ell_1*sp.sin(theta) + m2*g*ell_2*sp.sin(theta) + m3*g*ell_3z + P_0
 
-su.printeq("P", P)
+
+su.printeq("PE", PE)
 
 
 
@@ -49,7 +50,9 @@ su.printeq("P", P)
 # ### Generalized Forces (tau):
 # %%
 # TODO: now calculate and define tau
-# tau = sp.Matrix([])
+tau = sp.Matrix([[d*(f_l - f_r)], # type: ignore
+                 [ell_T*(f_l + f_r) * sp.cos(phi)], # type:ignore
+                 [ell_T*(f_l+f_r)*sp.cos(theta)*sp.sin(phi) - d*(f_l - f_r)*sp.sin(theta)]]]) # type: ignore
 
 
 # Group terms together for readability (this is to help with checking the result
@@ -66,7 +69,7 @@ su.printeq("tau", tau)
 # terms of Mdot, dM/dphi, dM/dtheta, and dM/dpsi.
 # %%
 # TODO: calculate Mdot and verify with lab manual
-# Mdot = 
+Mdot = M.diff(t)
 
 
 #%%[markdown]

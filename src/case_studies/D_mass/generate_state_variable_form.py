@@ -27,10 +27,10 @@ zd = z.diff(t)
 zdd = zd.diff(t)
 
 # defining symbols for external force and friction
-tau, b = sp.symbols("tau, b")
+F, b = sp.symbols("F, b")
 
 # defining the right-hand side of the equation and combining it with E-L part
-RHS = sp.Matrix([[tau - b * zd]])
+RHS = sp.Matrix([[F - b * zd]])
 full_eom = EL_case_studyD - RHS
 
 # finding and assigning zdd and thetadd
@@ -46,7 +46,7 @@ zdd_eom = result[zdd]  # EOM for thetadd, as a function of states and inputs
 # OK, now we can get the state variable form of the equations of motion.
 
 # %%
-from . import params as PE
+from . import params as P
 import numpy as np
 
 # defining fixed parameters that are not states or inputs (like g, ell, m, b)
@@ -58,7 +58,7 @@ import numpy as np
 # ctrl_input = np.array([tau])
 
 state = sp.Matrix([[z], [zd]])
-ctrl_input = sp.Matrix([[tau]])
+ctrl_input = sp.Matrix([[F]])
 
 # defining the function that will be called to get the derivatives of the states
 state_dot = sp.Matrix([[zd], [zdd_eom]])
