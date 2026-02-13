@@ -24,6 +24,7 @@ m3 = 0.1905 # kg
 J3x = 0.0002222 # kg m^2
 J3y = 0.0001956 # kg m^2
 J3z = 0.000027 # kg m^2
+beta = 0.001 # friction coefficient (N m s/rad)
 
 # initial conditions
 phi0 = 0

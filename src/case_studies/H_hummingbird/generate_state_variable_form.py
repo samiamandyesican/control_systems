@@ -35,7 +35,7 @@ su.enable_printing(__name__ == "__main__")
 # TODO: define symbols needed for potential energy and the RHS 
 # (e.g. friction, force_left, force_right, etc.) of the equations 
 # of motion.
-g, P_0, d, f_l, f_r, ell_T = dynamicsymbols("g P_0 d f_l f_r ell_T")
+g, P_0, d, f_l, f_r, ell_T = sp.symbols("g P_0 d f_l f_r ell_T")
 
 # TODO now calculate the potential energy "P"
 PE = m1*g*ell_1*sp.sin(theta) + m2*g*ell_2*sp.sin(theta) + m3*g*ell_3z + P_0
@@ -52,12 +52,12 @@ su.printeq("PE", PE)
 # TODO: now calculate and define tau
 tau = sp.Matrix([[d*(f_l - f_r)], # type: ignore
                  [ell_T*(f_l + f_r) * sp.cos(phi)], # type:ignore
-                 [ell_T*(f_l+f_r)*sp.cos(theta)*sp.sin(phi) - d*(f_l - f_r)*sp.sin(theta)]]]) # type: ignore
+                 [ell_T*(f_l+f_r)*sp.cos(theta)*sp.sin(phi) - d*(f_l - f_r)*sp.sin(theta)]]) # type: ignore
 
 
 # Group terms together for readability (this is to help with checking the result
 # but is not strictly necessary)
-tau[-1] = sp.collect(tau[-1], [sp.sin(theta), sp.sin(phi) * sp.cos(theta)])
+tau[-1] = sp.collect(tau[-1], [sp.sin(theta), sp.sin(phi) * sp.cos(theta)]) # type: ignore
 tau[-1] = sp.collect(tau[-1], [f_l + f_r, f_l - f_r])
 
 su.printeq("tau", tau)
@@ -94,7 +94,7 @@ su.printeq("Mdot", Mdot.subs(print_subs))
 # Wrap Mdot inside of sp.Matrix call so that individual elements can be modified
 Mdot = sp.Matrix(Mdot)
 
-Mdot22 = sp.collect(Mdot22, 2 * sp.sin(phi) * sp.cos(phi) * qdot[0])
+Mdot22 = sp.collect(Mdot22, 2 * sp.sin(phi) * sp.cos(phi) * qdot[0]) # type: ignore
 su.printeq("Mdot_22", Mdot22)
 Mdot[1, 1] = Mdot22  # replace with simplified version
 
@@ -123,13 +123,14 @@ Mdot[2, 2] = Mdot33  # replace with simplified version
 
 # %%
 
-#dM_dphi = 
-#dM_dphi = sp.simplify(dM_dphi)
+dM_dphi = M.diff(phi)
+dM_dphi = sp.simplify(dM_dphi)
 
 su.printeq("dM/dϕ", dM_dphi)
 
 # %%
-# dM_dtheta =
+dM_dtheta = M.diff(theta)
+dM_dtheta = sp.simplify(sp.trigsimp(dM_dtheta))
 
 # substitute N33 just for printing to match the lab manual
 N33 = dM_dtheta[2, 2]
@@ -145,7 +146,8 @@ dM_dtheta = sp.Matrix(dM_dtheta)
 dM_dtheta[2, 2] = N33
 
 # %%
-# dM_dpsi =
+dM_dpsi = M.diff(psi)
+dM_dpsi = sp.simplify(dM_dpsi)
 
 su.printeq("dM/dψ", dM_dpsi)
 
@@ -155,16 +157,16 @@ su.printeq("dM/dψ", dM_dpsi)
 # %%
 # TODO: calculate C
 # intermediate terms may be helpful, but calculate C -> 
-# C = 
+C = Mdot @ qdot - 0.5 * sp.Matrix([qdot.T @ dM_dphi, qdot.T @ dM_dtheta, qdot.T @ dM_dpsi]) @ qdot
 
 
 # can print C directly, but it is very long
-# su.printeq("C", C)
+su.printeq("C", C)
 
 # %% [markdown]
 # ### Partial Derivative of Potential Energy (dP/dq):
 # %%
-# dP_dq = 
+dP_dq = PE.diff(q)
 
 su.printeq("dP/dq", dP_dq)
 
@@ -210,18 +212,18 @@ if __name__ == "__main__":
     P = H_hummingbird.params
 
     param_vals = {
-        "m_1": P.m1,
-        "m_2": P.m2,
-        "m_3": P.m3,
-        "J_1x": P.J1x,
-        "J_1y": P.J1y,
-        "J_1z": P.J1z,
-        "J_2x": P.J2x,
-        "J_2y": P.J2y,
-        "J_2z": P.J2z,
-        "J_3x": P.J3x,
-        "J_3y": P.J3y,
-        "J_3z": P.J3z,
+        "m1": P.m1,
+        "m2": P.m2,
+        "m3": P.m3,
+        "J1x": P.J1x,
+        "J1y": P.J1y,
+        "J1z": P.J1z,
+        "J2x": P.J2x,
+        "J2y": P.J2y,
+        "J2z": P.J2z,
+        "J3x": P.J3x,
+        "J3y": P.J3y,
+        "J3z": P.J3z,
         "ell_1": P.ell1,
         "ell_2": P.ell2,
         "ell_3x": P.ell3x,
@@ -250,7 +252,3 @@ if __name__ == "__main__":
     tau_val = eom_generated.calculate_tau(x_test, u_test, **param_vals)
     print("tau_val:")
     print(tau_val, "\n")  # should be [[0.0012], [0.0833], [0]]
-
-
-
-    
