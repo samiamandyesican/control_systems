@@ -3,7 +3,7 @@
 from case_studies.common import sym_utils as su
 
 # local imports (from this folder)
-from generate_state_variable_form import *
+from case_studies.B_pendulum.generate_state_variable_form import *
 
 # This makes it so printing from su only happens when running this file directly
 su.enable_printing(__name__ == "__main__")

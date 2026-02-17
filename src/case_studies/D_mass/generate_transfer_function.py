@@ -13,10 +13,10 @@ D = sp.Matrix([[0]])
 
 # calc H(s)
 H = C @ (s * I - A_lin).inv() @ B_lin + D
-
-
 H = sp.simplify(H)
-display(Math(vlatex((sp.cancel(H[0, 0])))))
+
+print("H(s) = ")
+sp.pprint(sp.cancel(H[0, 0]))
 
 
 # %%
@@ -39,6 +39,8 @@ den_monic = sp.collect(sp.simplify(expanded_den / highest_order_term), s)
 # we don't need this "TransferFunction" object, but it helps
 # to print things properly without undoing the term rearrangement.
 tf_monic = TransferFunction(num_monic, den_monic, s)
-display(Math(vlatex((tf_monic))))
+
+print("Monic form of H(s) = ")
+sp.pprint(sp.cancel(tf_monic))
 
 # %%

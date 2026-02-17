@@ -17,36 +17,30 @@ su.enable_printing(__name__ == "__main__")
 # defining derivative of states, states, and inputs symbolically
 ### for this first one, keep in mind that zdd_eom is actually a full
 ### row of equations, while zdd is just the symbolic variable itself.
-F, tau = sp.symbols("F tau")
-force_mixing = [
-    (fr, sp.Rational(1, 2) * F + sp.Rational(1,2) * tau / d),
-    (fl, sp.Rational(1, 2) * F - sp.Rational(1,2) * tau / d)
-    ]
-state_variable_form = sp.Matrix([[zd], [hd], [thetad], [zdd_eom.subs(force_mixing)], [hdd_eom.subs(force_mixing)], [thetadd_eom.subs(force_mixing)]])
-inputs = sp.Matrix([[F], [tau]])
+state_variable_form = sp.Matrix([[zd], [zdd_eom]])
+states = sp.Matrix([[z], [zd]])
+inputs = sp.Matrix([[F]])
 
-# find equilibriums
-equilibrium_vars = [z_v, h, theta, zd, hd, thetad, F, tau]
-equilibrium_sol = sp.solve(state_variable_form, equilibrium_vars)
-
-sp.pprint(equilibrium_sol)
 
 # finding the jacobian with respect to states (A) and inputs (B)
-A = state_variable_form.jacobian(state)
+A = state_variable_form.jacobian(states)
 B = state_variable_form.jacobian(inputs)
 
 # sp.pprint(A)
 # sp.pprint(B)
 
 # sub in values for equilibrium points (x_e, u_e) or (x_0, u_0)
-equilibrium = [(z_v, 0.0), (h, 0.0), (theta, 0.0), (zd, 0.0), (hd, 0.0), (thetad, 0.0), (F, g*(m_c+2*m_r)), (tau, 0.0)]
+z_e = sp.symbols("z_e")
+x_e = sp.Matrix([[z_e], [0]])
+u_e = sp.Matrix([[k*z_e]])
+equilibrium = [(zd, 0.0), (z, z_e), (F, k * z_e)]
 A_lin = sp.simplify(A.subs(equilibrium))
 B_lin = sp.simplify(B.subs(equilibrium))
 
 sp.pprint(A_lin)
 sp.pprint(B_lin)
 
-sp.pprint(sp.simplify(A_lin @ state + B_lin @ inputs))
+sp.pprint(sp.simplify(A_lin @ (states - x_e) + B_lin @ (inputs - u_e)))
 
 
 # %%

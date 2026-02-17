@@ -1,37 +1,38 @@
 # %%
-# local (controlbook)
-from case_studies.common import sym_utils as su
-
-# local imports (from this folder)
-from case_studies.B_pendulum.generate_linearization import *
+from .generate_linearization import *
 from sympy.physics.control import TransferFunction
-
-# This makes it so printing from su only happens when running this file directly
-su.enable_printing(__name__ == "__main__")
 
 # define 's' as symbolic variable for the Laplace domain
 s = sp.symbols("s")
 I = sp.eye(A_lin.shape[0])
 
 # %%
-
 # define C and D
-C = sp.Matrix([[1, 0, 0, 0], [0, 1, 0, 0]])
-
-D = sp.Matrix([[0], [0]])
-
-
+C = sp.Matrix([[1, 0, 0, 0],
+               [0, 1, 0, 0]])
+D = sp.Matrix([[0],
+               [0]])
 # calc H(s)
-# using LUsolve instead of .inv() results in much nicer equations
 H = C @ (s * I - A_lin).LUsolve(B_lin) + D
+
 H = sp.simplify(H)
 
-# if we print this now, it is correct, but a little hard to read
-display(Math(vlatex((sp.cancel(H)))))
+print("H(s) = ")
+sp.pprint(sp.cancel(H))
+
+A_simp = A_lin.as_mutable()
+A_simp[3, 0] = 0
+print("A_simp = ")
+sp.pprint(A_simp)
+H_simp = C @ (s * I - A_simp).LUsolve(B_lin) + D
+H_simp = sp.simplify(H_simp)
+print("H_simplified(s) = ")
+sp.pprint(sp.cancel(H_simp))
+
 # %%
 # substituting for numerical values helps to simplify things.
-H = H.subs([(m1, 0.25), (m2, 1), (ell, 1), (b, 0.0)])
-display(Math(vlatex((sp.cancel(H)))))
+H = H.subs([(m1, P.m1), (m2, P.m2), (ell, P.ell), (g, P.g)])
+sp.pprint(sp.cancel(H))
 
 
 # %%
@@ -59,6 +60,6 @@ for i in range(len(H)):
     tf_monic = TransferFunction(
         cancel_terms.as_numer_denom()[0], cancel_terms.as_numer_denom()[1], s
     )
-    display(Math(vlatex((tf_monic))))
+    sp.pprint((tf_monic))
 
 # %%

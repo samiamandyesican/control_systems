@@ -14,7 +14,7 @@ su.enable_printing(__name__ == "__main__")
 # %%
 # defining potential energy
 P = (
-    m1 * g * ell / 2.0 * (cos(theta) - 1)
+    m1 * g * ell / 2.0 * (cos(theta) - 1) # type: ignore
 )  # this is "mgh", where "h" is a function of generalized coordinate "q"
 
 # can also do the following to get the same answer
@@ -30,7 +30,7 @@ L = simplify(K - P)
 
 # %%
 # Solution for Euler-Lagrange equations, but this does not include right-hand side (like friction and tau)
-EL_case_studyB = simplify(diff(diff(L, qdot), t) - diff(L, q))
+EL_case_studyB = simplify(diff(diff(L, qdot), t) - diff(L, q)) # type: ignore
 # EL_case_studyB = simplify(L.diff(q_dot).diff(t) - L.diff(q))
 
 display(Math(vlatex(EL_case_studyB)))
@@ -42,9 +42,9 @@ display(Math(vlatex(EL_case_studyB)))
 ############################################################
 
 # these are just convenience variables
-zd = z.diff(t)
+zd = z.diff(t) # type: ignore
 zdd = zd.diff(t)
-thetad = theta.diff(t)
+thetad = theta.diff(t) # type: ignore
 thetadd = thetad.diff(t)
 
 # defining symbols for external force and friction
