@@ -13,6 +13,8 @@
 # package, but in this case we are essentially extending the previous lab file...
 # they would normally be in the same file, but we are breaking them up to have
 # one file per lab assignment.
+# from case_studies.A_arm.params import B
+from case_studies.H_hummingbird import params as P
 from case_studies.H_hummingbird.generate_state_variable_form import *
 
 # This makes it so printing from su only happens when running this file directly
@@ -39,18 +41,21 @@ F, T = sp.symbols("F tau")  # T for torque (tau already used for generalized for
 # HINT: Use sp.solve([eq1, eq2], [f_l, f_r]) to solve the system
 # HINT: Extract solutions using solution[f_l] and solution[f_r]
 
-# fl_as_FT = None  # TODO: replace with solution for f_l
-# fr_as_FT = None  # TODO: replace with solution for f_r
+eq1 = sp.Eq(F, f_l + f_r)
+eq2 = sp.Eq(T, d*(f_l - f_r))
+solution = sp.solve([eq1, eq2], [f_l, f_r])
+fl_as_FT = solution[f_l]  # TODO: replace with solution for f_l
+fr_as_FT = solution[f_r]  # TODO: replace with solution for f_r
 
-su.printeq("f_l", fl_as_FT)
-su.printeq("f_r", fr_as_FT)
+# su.printeq("f_l", fl_as_FT)
+# su.printeq("f_r", fr_as_FT)
 
 tau_FT = tau.subs({f_l: fl_as_FT, f_r: fr_as_FT})
 tau_FT = sp.simplify(tau_FT)
 
 # Verify that f_l and f_r are completely eliminated
 assert not tau_FT.has(f_l) and not tau_FT.has(f_r), "f_l or f_r still in tau_FT!"
-su.printeq("tau_FT", tau_FT)
+# su.printeq("tau_FT", tau_FT)
 
 # %% [markdown]
 # #### Form full EOM using new control inputs
@@ -59,9 +64,14 @@ su.printeq("tau_FT", tau_FT)
 # TODO: define qddot, then form LHS and RHS of EOM using tau_FT, and finally create the full EOM
 # HINT: qddot can be found by differentiating qdot with respect to time
 # HINT: RHS = tau_FT - B_mat @ qdot, where B_mat is the friction matrix (B_mat = sp.eye(3, 3) * beta)
+phiddot, thetaddot, psiddot, beta = sp.symbols("phiddot thetaddot psiddot beta")
+qddot = sp.Matrix([phiddot, thetaddot, psiddot])
+B_mat = sp.eye(3) * beta  # friction matrix
+LHS = M @ qddot + C + dP_dq
+RHS = tau_FT - B_mat @ qdot
 
-# eom = None  # TODO: replace with full EOM
-su.printsym(eom)
+eom = sp.Eq(LHS, RHS)  # TODO: replace with full EOM
+# su.printsym(eom)
 
 # %% [markdown]
 # # Part 2: Find equilibrium values
@@ -83,9 +93,23 @@ F_eq, T_eq = sp.symbols("F_e tau_e")
 # TODO add control inputs F_e and T_e (replace with equilibrium symbols) to eq_subs
 # HINT: eq_subs[F] = F_eq, etc. 
 
+eq_subs = {
+    phi: phi_eq,
+    phidot: 0,
+    phiddot: 0,
+    theta: theta_eq,
+    thetadot: 0,
+    thetaddot: 0,
+    psi: psi_eq,
+    psidot: 0,
+    psiddot: 0,
+    F: F_eq,
+    T: T_eq,
+}
+
 # TODO Apply all substitutions to the EOM
-# eom_eq = None  # TODO: replace with EOM after substitutions
-su.printsym(eom_eq)
+eom_eq = eom.subs(eq_subs)  # TODO: replace with EOM after substitutions
+# su.printsym(eom_eq)
 
 # %% [markdown]
 # #### Substitute $\tau_e=0$
@@ -94,7 +118,7 @@ su.printsym(eom_eq)
 # %%
 T_eq_val = 0
 eom_eq = eom_eq.subs({T_eq: T_eq_val})
-su.printsym(eom_eq)
+# su.printsym(eom_eq)
 
 # %% [markdown]
 # #### Substitute $\phi_e=0$
@@ -107,7 +131,7 @@ su.printsym(eom_eq)
 # %%
 phi_eq_val = 0
 eom_eq = eom_eq.subs({phi_eq: phi_eq_val})
-su.printsym(eom_eq)
+# su.printsym(eom_eq)
 
 # %% [markdown]
 # #### Substitute $\theta_e=0$
@@ -117,17 +141,18 @@ su.printsym(eom_eq)
 # %%
 theta_eq_val = 0
 eom_eq = eom_eq.subs({theta_eq: theta_eq_val})
-su.printsym(eom_eq)
+# su.printsym(eom_eq)
 
 # %% [markdown]
 # #### Solve for $F_e$
 # %%
 # TODO Now solve for F_e from the remaining equation (theta equation)
 # Hint: Use sp.solve(eom_eq, F_eq) to solve for F_e
-F_eq_expr = None  # TODO: replace with solution for F_e
+sol_Fe = sp.solve(eom_eq, F_eq)
+F_eq_expr = sol_Fe[F_eq]  # TODO: replace with solution for F_e
 
 F_eq_expr = sp.factor(F_eq_expr)  # factors out g
-su.printeq("F_e", F_eq_expr)
+# su.printeq("F_e", F_eq_expr)
 
 # ψ_e does not appear in the equations, so we choose ψ_e = 0 for simplicity
 psi_eq_val = 0
@@ -138,8 +163,8 @@ psi_eq_val = 0
 # %%
 # Use the middle row (theta equation) from the full EOM for longitudinal dynamics
 # TODO: extract the middle row (theta equation) from the full EOM and assign it to eom_lon
-eom_lon = None  # TODO: replace with theta equation from full EOM
-su.printsym(sp.expand_trig(eom_lon))
+eom_lon = sp.Eq(LHS[1], RHS[1])  # TODO: replace with theta equation from full EOM
+# su.printsym(sp.expand_trig(eom_lon))
 
 # %% [markdown]
 # #### Step 2: Decouple from lateral dynamics
@@ -149,8 +174,21 @@ su.printsym(sp.expand_trig(eom_lon))
 # HINT: Substitute φ=0, ψ=0, and their derivatives=0 into eom_lon
 # HINT: Also substitute F=F_e (equilibrium thrust) to focus on deviations from equilibrium
 
-eom_lon = None  # TODO: replace with eom_lon after substitutions
-su.printsym(eom_lon)
+eom_lon_subs = {
+    phi: 0,
+    phidot: 0,
+    phiddot: 0,
+    psi: 0,
+    psidot: 0,
+    psiddot: 0,
+    F: F_eq,
+}
+
+eom_lon = eom_lon.subs(eom_lon_subs)
+sol_Fe = sp.solve(eom_lon, F_eq)
+F_eq_check = sol_Fe[0]
+# su.printeq("F_e:", F_eq_check)  # should match F_eq_expr
+# su.printsym(eom_lon)
 
 # %% [markdown]
 # #### Step 3: Feedback linearization
@@ -163,12 +201,12 @@ su.printsym(eom_lon)
 # HINT: Set θ̇=0 and θ̈=0 to isolate the nonlinear (gravity) terms, then solve for F_fl 
 # that cancels those terms. Finally, substitute F = F_fl + F_ctrl to get the linearized EOM.
 
-F_fl = None  # TODO: replace with solution for F_fl
-su.printeq("F_fl", F_fl)
+F_fl = ell_1/ell_T * g * m1 * sp.cos(theta) + ell_2/ell_T * g * m2 * sp.cos(theta)  # TODO: replace with solution for F_fl
+# su.printeq("F_fl", F_fl)
 
 # Apply feedback linearization: F = F_fl + F_ctrl
 F_ctrl = sp.symbols("F_ctrl")
-feedback_lin_subs = {F: F_fl + F_ctrl}
+feedback_lin_subs = {F_eq: F_fl + F_ctrl}
 linearized_eom_lon = eom_lon.subs(feedback_lin_subs)
 linearized_eom_lon = sp.simplify(linearized_eom_lon)
 
@@ -176,16 +214,17 @@ linearized_eom_lon = sp.simplify(linearized_eom_lon)
 # TODO solve for θ̈ in terms of F_ctrl and rearrange to get the linearized EOM
 # HINT: Use sp.solve get θ̈
 
-linearized_eom_lon = None  # TODO: replace with linearized EOM in terms of θ̈ and F_ctrl
-su.printsym(linearized_eom_lon)
+linearized_eom_lon = sp.solve(linearized_eom_lon, thetaddot)[0]  # TODO: replace with linearized EOM in terms of θ̈ and F_ctrl
+# print("linearized_eom_lon:")
+# su.printsym(linearized_eom_lon)
 
 # %% [markdown]
 # #### Step 4: Simplify by neglecting friction
 # %%
 # TODO Set β=0 to ignore rotational damping (typically small for drones)
 
-thetaddot_eom = None  # TODO: replace with simplified θ̈ EOM after setting β=0
-su.printeq(thetaddot, thetaddot_eom)
+thetaddot_eom = linearized_eom_lon.subs({beta: 0})  # TODO: replace with simplified θ̈ EOM after setting β=0
+# su.printeq(thetaddot, thetaddot_eom)
 
 # %% [markdown]
 # # Part 4: Lateral Dynamics (Roll and Yaw Control)
@@ -193,10 +232,10 @@ su.printeq(thetaddot, thetaddot_eom)
 # %%
 # Use the first (phi) and third (psi) rows from the full EOM
 eom_lat = sp.Eq(
-    sp.Matrix([eom.lhs[0], eom.lhs[2]]),
-    sp.Matrix([eom.rhs[0], eom.rhs[2]])
+    sp.Matrix([LHS[0], LHS[2]]),
+    sp.Matrix([RHS[0], RHS[2]])
 )
-su.printsym(eom_lat)
+# su.printsym(eom_lat)
 
 # %% [markdown]
 # #### Step 2: Decouple from longitudinal dynamics
@@ -204,8 +243,15 @@ su.printsym(eom_lat)
 # TODO: Assume longitudinal motion is at equilibrium: θ=0, θ̇=0, F=F_e
 # TODO: Also neglect friction (β=0) for simplicity
 # HINT: Substitute the longitudinal equilibrium values for θ, θ̇, F, and β into the lateral EOM
+lat_eq_subs = {
+    theta: 0,
+    thetadot: 0,
+    thetaddot: 0,
+    F: F_eq,
+    beta: 0,
+}
 
-eom_lat = None  # TODO: replace with eom_lat after substitutions
+eom_lat = eom_lat.subs(lat_eq_subs)  # TODO: replace with eom_lat after substitutions
 su.printsym(eom_lat)
 
 # %% [markdown]
@@ -215,11 +261,25 @@ su.printsym(eom_lat)
 # State: x = [φ, ψ, φ̇, ψ̇]ᵀ,  Input: u = [τ]ᵀ
 # TODO: Solve for φ̈ and ψ̈ from eom_lat, then create xdot_lat, x_lat, u_lat, and compute Jacobians 
 # HINT: Use sp.solve to get φ̈ and ψ̈ in terms of states and inputs
+eom_lat_solved = sp.solve(eom_lat, [phiddot, psiddot])  # TODO: replace with solution for φ̈ and ψ̈
+phiddot_expr = eom_lat_solved[phiddot]
+psiddot_expr = eom_lat_solved[psiddot]
+x_lat = sp.Matrix([[phi], [psi], [phidot], [psidot]])
+xdot_lat = sp.Matrix([[phidot], [psidot], [phiddot_expr], [psiddot_expr]])
+u_lat = sp.Matrix([[T]])  # T is the torque input (tau)
 
-# A_lat = None  # TODO: replace with Jacobian df/dx 
-# B_lat = None  # TODO: replace with Jacobian df/du 
+A_lat = xdot_lat.jacobian(x_lat) # TODO: replace with Jacobian df/dx 
+B_lat = xdot_lat.jacobian(u_lat)  # TODO: replace with Jacobian df/du 
 
 # substitute equilibrium values into the Jacobians
+lat_eq_vals = {
+    phi: 0,
+    psi: 0,
+    phidot: 0,
+    psidot: 0,
+    T: 0,
+}
+
 A_lat = sp.cancel(A_lat.subs(lat_eq_vals))  # cancel cleans up signs
 B_lat = B_lat.subs(lat_eq_vals)
 
