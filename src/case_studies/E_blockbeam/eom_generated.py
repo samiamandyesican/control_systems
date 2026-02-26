@@ -8,13 +8,6 @@ def calculate_eom(x, u, m1, m2, ell, g):
     [z, theta, zdot, thetadot] = x.flatten()  # ensure 1D
     [F] = u.flatten()  # ensure 1D
     zddot = -g*np.sin(theta) + thetadot**2*z
-    # if z >= ell:
-    #     z = ell
-    #     zdot = - abs(zdot)
-    #     zddot = - abs(zddot)
-    # elif z <= 0:
-    #     z = 0
-    #     zdot = abs(zdot)
-    #     zddot = abs(zddot)
+
     eom = np.array([[zdot], [thetadot], [zddot], [(3/2)*(2*F*ell*np.cos(theta) - ell*g*m2*np.cos(theta) - 2*g*m1*z*np.cos(theta) - 4*m1*thetadot*z*zdot)/(ell**2*m2 + 3*m1*z**2)]])
     return eom.squeeze()

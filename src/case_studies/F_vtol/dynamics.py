@@ -13,8 +13,8 @@ class VTOLDynamics(DynamicsBase):
             # Initial state conditions
             state0=np.array([P.z_v0, P.h0, P.theta0, P.z_vdot0, P.hdot0, P.thetadot0]),
             # Input torque limits
-            u_max=P.F_max,
-            u_min=P.F_min,
+            u_max=np.array([P.fr_max, P.fl_max]),
+            u_min=np.array([P.fr_min, P.fl_min]),
             # Time step for integration
             dt=P.ts,
         )

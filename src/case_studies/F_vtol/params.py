@@ -16,15 +16,35 @@ z_v0 = 0.0
 h0 = 0.0
 theta0 = 0.0
 
-z_vdot0 = 0.1
-hdot0 = -0.1
-thetadot0 = 0.2
+z_vdot0 = 0.0
+hdot0 = 0.0
+thetadot0 = 0.0
+
+# linearization/equilibrium point
+theta_eq = 0.0
+h_eq = 0.0
+z_v_eq = 0.0
+tau_eq = 0.0
+F_eq = np.cos(theta_eq)*g*(mc + ml + mr)
+
+# trsnfer function numerators and denominators
+# h / F
+tf_al_num = [1 / (mc + mr + ml)]
+tf_al_den = [1, 0, 0]
+# theta / tau
+tf_th_num = [1 / (Jc + 2*mr*d**2)]
+tf_th_den = [1, 0, 0]
+# z / theta
+cweepy_guy = (mc+2*mr)*Jc + (2*mc*mr+4*mr**2)*d**2
+tf_z_num = [- F_eq * (Jc + 2 * mr*d**2) / cweepy_guy]
+tf_z_den = [1, mu*(Jc+2*mr*d**2)/cweepy_guy, 0]
+
 
 # force limits
-F_min = -1.
-F_max = 1.
-tau_min = -0.05
-tau_max = 0.05
+fl_min = 0.0
+fl_max = 10.0
+fr_min = fl_min
+fr_max = fl_max
 
 # no idea what this means, just got it from vtol params
 unmixer = np.array([[1.0, 1.0], [d, -d]])  # [F, tau] = unmixer @ [fr, fl]

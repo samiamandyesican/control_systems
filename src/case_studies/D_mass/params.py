@@ -13,5 +13,10 @@ ts = 0.01  # integration time step
 ns = 1000 # number of time steps
 
 # Limits of force input
-F_max = 20  # N
-F_min = -20
+F_max = 6  # N
+F_min = -6
+F_eq = 0 # N, equilibrium force to hold mass at z_e=0 (F_eq = k*z_e)
+
+# transfer function numerator and denominator
+tf_num = [1/m]
+tf_den = [1, b/m, k/m]

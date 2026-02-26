@@ -31,7 +31,7 @@ def run_simulation(
     d_hist = []
     dhat_hist = []
 
-    time = np.arange(start=0.0, stop=t_final, step=dt, dtype=np.float64)
+    time = np.arange(start=0.0, stop=t_final, step=dt, dtype=np.float64) # type: ignore
     y = sys.h()
     for t in time[1:]:
         r = np.array([ref.square(t) if ref is not None else np.nan for ref in refs])

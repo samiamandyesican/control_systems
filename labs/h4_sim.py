@@ -11,6 +11,7 @@ P = H_hummingbird.params
 hummingbird = H_hummingbird.Dynamics()
 u_l = 0.5
 u_r = 0.5
+# km is about 0.332 experimentally
 
 # initalize data storage
 # initial conditions

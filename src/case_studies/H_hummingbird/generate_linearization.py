@@ -224,7 +224,7 @@ linearized_eom_lon = sp.solve(linearized_eom_lon, thetaddot)[0]  # TODO: replace
 # TODO Set β=0 to ignore rotational damping (typically small for drones)
 
 thetaddot_eom = linearized_eom_lon.subs({beta: 0})  # TODO: replace with simplified θ̈ EOM after setting β=0
-# su.printeq(thetaddot, thetaddot_eom)
+su.printeq(thetaddot, thetaddot_eom)
 
 # %% [markdown]
 # # Part 4: Lateral Dynamics (Roll and Yaw Control)
@@ -252,7 +252,7 @@ lat_eq_subs = {
 }
 
 eom_lat = eom_lat.subs(lat_eq_subs)  # TODO: replace with eom_lat after substitutions
-su.printsym(eom_lat)
+# su.printsym(eom_lat)
 
 # %% [markdown]
 # #### Step 3: Jacobian linearization
