@@ -32,6 +32,7 @@ class BlockbeamDynamics(DynamicsBase):
         # return the output equations
         # could also use input u if needed
         z = self.state[0]
-        y = np.array([z])
+        theta = self.state[1]
+        y = np.array([z, theta])
         return y
   
