@@ -25,6 +25,7 @@ J3x = 0.0002222 # kg m^2
 J3y = 0.0001956 # kg m^2
 J3z = 0.000027 # kg m^2
 beta = 0.001 # friction coefficient (N m s/rad)
+km = g*(m1*ell1 + m2*ell2) / ellT
 
 # initial conditions
 phi0 = 0
@@ -33,6 +34,31 @@ psi0 = 0
 phidot0 = 0
 thetadot0 = 0
 psidot0 = 0
+
+# linearization/equilibrium point
+theta_eq = 0.0
+phi_eq = 0.0
+psi_eq = 0.0
+x_eq = np.array([theta_eq, phi_eq, psi_eq, 0, 0, 0])
+
+# transfer function numerators and denominators
+tf_th_num = [ellT / (J1y+J2y + m1*ell1**2 + m2*ell2**2)]
+tf_th_den = [1, 0, 0]
+
+tf_phi_num = [1/J1x]
+tf_phi_den = [1, 0, 0]
+
+F_eq = (m1*ell1 + m2*ell2)*g/ellT
+b_psi_phi = F_eq * ellT / (J1z + J2z + J3z + m1*ell1**2 + m2*ell2**2 + m3*ell3x**2 + m3*ell3y**2 + m3*ell3z**2)
+tf_psi_num = [b_psi_phi]
+tf_psi_den = [1, 0, 0]
+
+# force limits
+u_l_max = 1.0
+u_l_min = 0.0
+u_r_max = 1.0
+u_r_min = 0.0
+
 
 
 ##### Chapter 4

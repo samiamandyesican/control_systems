@@ -11,7 +11,7 @@ time, x_hist, u_hist, r_hist, *_ = common.run_simulation(
     mass,
     [z_ref],
     controller,
-    controller_input="measurement",
+    controller_input="state",
     t_final=20,
     dt=D_mass.params.ts
 )

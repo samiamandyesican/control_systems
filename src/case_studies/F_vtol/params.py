@@ -26,6 +26,8 @@ h_eq = 0.0
 z_v_eq = 0.0
 tau_eq = 0.0
 F_eq = np.cos(theta_eq)*g*(mc + ml + mr)
+x_eq = np.array([z_v_eq, h_eq, theta_eq, 0, 0, 0])
+u_eq = np.array([F_eq, tau_eq])
 
 # trsnfer function numerators and denominators
 # h / F
@@ -39,6 +41,26 @@ cweepy_guy = (mc+2*mr)*Jc + (2*mc*mr+4*mr**2)*d**2
 tf_z_num = [- F_eq * (Jc + 2 * mr*d**2) / cweepy_guy]
 tf_z_den = [1, mu*(Jc+2*mr*d**2)/cweepy_guy, 0]
 
+# state space
+A = np.array([
+    [0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0, 1],
+    [0, 0, -F_eq/(mc+mr+ml), -mu/(mc+mr+ml), 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0]
+])
+B = np.array([
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [1/(mc+mr+ml), 0],
+    [0, 1/(Jc+(mr+ml)*d**2)],
+])
+Cm = np.eye(3, 6)
+Cr = np.eye(2, 6)
+D = np.zeros((6, 2))
 
 # force limits
 fl_min = 0.0

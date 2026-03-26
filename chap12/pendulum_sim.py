@@ -25,4 +25,4 @@ time, x_hist, u_hist, r_hist, xhat_hist, d_hist, *_ = common.run_simulation(
 
 viz = B_pendulum.Visualizer(time, x_hist, u_hist, r_hist, xhat_hist, d_hist)
 viz.plot()
-# viz.animate()
+viz.animate()

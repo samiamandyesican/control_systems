@@ -144,7 +144,7 @@ class HummingbirdDynamics(DynamicsBase):
             y (NDArray[np.float64]): measured output vector [phi, theta, psi].
         """
         # saturate pwm
-        pwm = np.clip(pwm, 0.0, 1.0)
+        pwm = np.clip(pwm, 0.0, 1.0) # u_l, u_r
 
         # convert pwm to motor forces [f_l, f_r]
         u = pwm * self.km

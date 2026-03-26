@@ -226,6 +226,13 @@ linearized_eom_lon = sp.solve(linearized_eom_lon, thetaddot)[0]  # TODO: replace
 thetaddot_eom = linearized_eom_lon.subs({beta: 0})  # TODO: replace with simplified θ̈ EOM after setting β=0
 su.printeq(thetaddot, thetaddot_eom)
 
+svf_lon = sp.Matrix([[thetadot], [thetaddot_eom]])
+x_lon = sp.Matrix([[theta], [thetadot]])
+u_lon = sp.Matrix([[F]])
+
+A_lon = svf_lon.jacobian(x_lon)
+B_lon = svf_lon.jacobian(u_lon)
+
 # %% [markdown]
 # # Part 4: Lateral Dynamics (Roll and Yaw Control)
 # #### Step 1: Extract lateral EOM
