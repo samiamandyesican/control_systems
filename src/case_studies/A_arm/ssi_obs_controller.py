@@ -12,7 +12,7 @@ class ArmSSIOController(ControllerBase):
         # control tuning parameters
         tr = 0.489
         zeta = 0.707
-        integrator_pole = [-5.0]
+        integrator_pole = [-0.0]
 
         # augmented system
         A1 = np.block([[P.A, np.zeros((2, 1))], [-P.Cr, np.zeros(1)]])
