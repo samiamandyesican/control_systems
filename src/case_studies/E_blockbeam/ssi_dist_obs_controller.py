@@ -60,13 +60,13 @@ class BlockbeamSSIDOController(common.ControllerBase):
         self.separate_integrator = separate_integrator
 
         # observer design parameters
-        TS_obs = 14.0 # time scale separation between controller and observer
+        TS_obs = 7.0 # time scale separation between controller and observer
         des_obs_poles = des_poles[:-1] * TS_obs
         # des_obs_poles = np.array([-160, -145, -120, -140])
-        disturbance_poles = np.array([-10])
+        disturbance_poles = np.array([-7.0])
         des_obs_poles = np.hstack((des_obs_poles, disturbance_poles))
         
-        self.u_fl = lambda x: np.array([1/2 * P.m2*P.g + P.m1*P.g* x[0] /P.ell])
+        self.u_fl = lambda x: np.array([1/2 * P.m2*P.g + P.m1*P.g* self.x_eq[0] /P.ell])
         self.u_prev = np.zeros(P.B.shape[1])
         self.observer = DistObserver(P.A, P.B, P.Cm, des_obs_poles, P.ts, self.x_eq, self.u_eq, self.u_fl)
 

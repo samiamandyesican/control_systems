@@ -40,6 +40,8 @@ theta_eq = 0.0
 phi_eq = 0.0
 psi_eq = 0.0
 x_eq = np.array([theta_eq, phi_eq, psi_eq, 0, 0, 0])
+x_eq_lat = np.array([phi_eq, psi_eq, 0, 0])
+x_eq_lon = np.array([theta_eq, 0])
 
 # transfer function numerators and denominators
 tf_th_num = [ellT / (J1y+J2y + m1*ell1**2 + m2*ell2**2)]
@@ -58,6 +60,26 @@ u_l_max = 1.0
 u_l_min = 0.0
 u_r_max = 1.0
 u_r_min = 0.0
+
+# matrices for state space representation
+b_theta = ellT / (m1*ell1**2 + m2*ell2**2 + J1y + J2y)
+A_lon = np.array([
+    [0, 1],
+    [0, 0]
+])
+B_lon = np.array([[0, b_theta]]).T
+Cr_lon = np.array([[1, 0]])
+
+
+J_T = m1*ell1**2 + m2*ell2**2 + J2z + m3*(ell3x**2 + ell3y**2)
+A_lat = np.array([
+    [0, 0, 1, 0],
+    [0, 0, 0, 1],
+    [0, 0, 0, 0],
+    [ellT*F_eq/(J_T + J1x), 0, 0, 0]
+])
+B_lat = np.array([[0, 0, 1/J1x, 0]]).T
+Cr_lat = np.array([[0, 1, 0, 0]])
 
 
 

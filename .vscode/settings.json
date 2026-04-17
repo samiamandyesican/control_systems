@@ -7,9 +7,11 @@
     // GitHub Copilot Settings
     // ---------------------------------------------------------------------------
     "github.copilot.enable": {
-        "*": true,
-        "yaml": false,
-        "plaintext": false
+        "*": false,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false,
+        "yaml": false
     },
     // Copilot Chat settings to encourage learning
     // "github.copilot.chat.codeGeneration.instructions": [

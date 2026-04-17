@@ -4,9 +4,10 @@
 import numpy as np
 
 
-def calculate_eom(x, u, F_wind, m_c, J_c, m_r, m_l, d, mu, g):
+def calculate_eom(x, u, wind, altitude_dist, m_c, J_c, m_r, m_l, d, mu, g):
     [z_v, h, theta, z_vdot, hdot, thetadot] = x.flatten()  # ensure 1D
     [fr, fl] = u.flatten()  # ensure 1D
     # disturbance input (set to 0 if you don't want it)
-    eom = np.array([[z_vdot], [hdot], [thetadot], [-(fl*np.sin(theta) + fr*np.sin(theta) + mu*z_vdot - F_wind)/(m_c + 2*m_r)], [(fl*np.cos(theta) + fr*np.cos(theta) - g*m_c - g*m_l - g*m_r + F_wind)/(m_c + 2*m_r)], [d*(-fl + fr)/(J_c + 2*d**2*m_r)]])
+    eom = np.array([[z_vdot], [hdot], [thetadot], [-(fl*np.sin(theta) + fr*np.sin(theta) + mu*z_vdot + wind)/(m_c + 2*m_r)], [(fl*np.cos(theta) + fr*np.cos(theta) - g*m_c - g*m_l - g*m_r + altitude_dist)/(m_c + 2*m_r)], [d*(-fl + fr)/(J_c + 2*d**2*m_r)]])
+    
     return eom.squeeze()

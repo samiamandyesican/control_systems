@@ -24,4 +24,4 @@ time, x_hist, u_hist, r_hist, xhat_hist, d_hist, dhat_hist = common.run_simulati
 
 viz = A_arm.Visualizer(time, x_hist, u_hist, r_hist, xhat_hist, d_hist, dhat_hist)
 viz.plot()
-# viz.animate()
+viz.animate()

@@ -20,6 +20,10 @@ z_vdot0 = 0.0
 hdot0 = 0.0
 thetadot0 = 0.0
 
+# mixers
+unmixer = np.array([[1.0, 1.0], [d, -d]])  # [F, tau] = unmixer @ [fr, fl]
+mixer = np.linalg.inv(unmixer)  # [fr, fl] = mixer @ [F, tau]
+
 # linearization/equilibrium point
 theta_eq = 0.0
 h_eq = 0.0
@@ -67,7 +71,3 @@ fl_min = 0.0
 fl_max = 10.0
 fr_min = fl_min
 fr_max = fl_max
-
-# no idea what this means, just got it from vtol params
-unmixer = np.array([[1.0, 1.0], [d, -d]])  # [F, tau] = unmixer @ [fr, fl]
-mixer = np.linalg.inv(unmixer)  # [fr, fl] = mixer @ [F, tau]

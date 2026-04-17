@@ -4,7 +4,7 @@ import control as ctrl
 from case_studies.common.numeric_integration import rk4_step
 
 class DistObserver:
-    def __init__(self, A, B, Cm, des_obs_poles, dt, x_eq, u_eq, u_fl=None):
+    def __init__(self, A, B, Cm, des_obs_poles, dt, x_eq, u_eq, u_fl=None, mixer=None):
         self.A = A
         self.B = B
         self.Cm = Cm
@@ -12,6 +12,7 @@ class DistObserver:
         self.x_eq = x_eq
         self.u_eq = u_eq
         self.u_fl = u_fl # note this is a function that takes in the observer state and computes the feedforward control for feedback linearization (if applicable)
+        self.mixer = mixer
 
         # augmented system for disturbance estimation
         num_inputs = B.shape[1] # assume number of disturbances is equal to number of inputs
@@ -35,13 +36,13 @@ class DistObserver:
         print(f"Observer gain matrix L:\n{self.L2}")
 
         # initialize observer variables
-        self.x2hat = np.zeros(self.A2.shape[0])
+        self.x2hat_tilde = np.zeros(self.A2.shape[0])
         self.u_prev = np.zeros(num_inputs)
         self.x2_eq = np.hstack((self.x_eq, np.zeros(num_inputs)))
 
-    def observer_f(self, x2hat, y):
+    def observer_f(self, x2hat_tilde, y):
         # compute tilde variables
-        x2hat_tilde = x2hat - self.x2_eq
+        x2hat = x2hat_tilde + self.x2_eq
         y_error = y - self.Cm2 @ x2hat
 
         if self.u_fl is not None:
@@ -66,8 +67,12 @@ class DistObserver:
     
     def update(self, y, u_prev):
         self.u_prev = u_prev
-        x2hat = rk4_step(self.observer_f, self.x2hat, y, self.dt)
-        self.x2hat = x2hat
-        xhat = x2hat[:-1]
-        dhat = x2hat[-1:]
+        x2hat_tilde = rk4_step(self.observer_f, self.x2hat_tilde, y, self.dt)
+        self.x2hat_tilde = x2hat_tilde
+        x2hat = x2hat_tilde + self.x2_eq
+        xhat = x2hat[:-self.B.shape[1]]
+        dhat = x2hat[-self.B.shape[1]:]
+        if self.mixer is not None:
+            dhat = self.mixer @ dhat
+        
         return xhat, dhat

@@ -1,5 +1,3 @@
-from re import S
-
 import numpy as np
 import control as ctrl
 

@@ -8,7 +8,7 @@ from .eom_generated import calculate_eom
 
 
 class VTOLDynamics(DynamicsBase):
-    def __init__(self, alpha=0.0, F_wind=0.0):
+    def __init__(self, alpha=0.0, wind_dist=0.0, altitude_disturbance=0.0):
         super().__init__(
             # Initial state conditions
             state0=np.array([P.z_v0, P.h0, P.theta0, P.z_vdot0, P.hdot0, P.thetadot0]),
@@ -27,10 +27,11 @@ class VTOLDynamics(DynamicsBase):
         self.d = self.randomize_parameter(P.d, alpha)
         self.mu = self.randomize_parameter(P.mu, alpha)
         self.g = P.g
-        self.F_wind = F_wind
+        self.wind_dist = wind_dist
+        self.altitude_disturbance = altitude_disturbance
 
     def f(self, x, u):
-        xdot = calculate_eom(x, u, self.F_wind, self.mc, self.Jc, self.mr, self.ml, self.d, self.mu, self.g)
+        xdot = calculate_eom(x, u, self.wind_dist, self.altitude_disturbance, self.mc, self.Jc, self.mr, self.ml, self.d, self.mu, self.g)
         return xdot
 
     def h(self):
