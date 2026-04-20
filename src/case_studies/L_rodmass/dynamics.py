@@ -4,7 +4,7 @@ import numpy as np
 # local (controlbook)
 from . import params as P
 from ..common import DynamicsBase
-
+from .eom_generated import calculate_eom
 
 class RodMassDynamics(DynamicsBase):
     """
@@ -50,6 +50,8 @@ class RodMassDynamics(DynamicsBase):
         """
 
         # TODO: implement your dynamics here ... 
+        xdot = calculate_eom(x, u, self.m, self.g, self.ell, self.b, self.k1, self.k2)
+        return xdot
 
 
     def h(self):
@@ -60,3 +62,5 @@ class RodMassDynamics(DynamicsBase):
             y: Output vector
         """
         # TODO: implement your output equation here ...
+        y = P.Cr @ self.state
+        return y

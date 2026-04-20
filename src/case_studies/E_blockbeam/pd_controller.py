@@ -1,5 +1,3 @@
-from os import error
-
 import numpy as np
 
 from case_studies import common

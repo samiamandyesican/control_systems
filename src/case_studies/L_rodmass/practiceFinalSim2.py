@@ -11,8 +11,7 @@ import matplotlib.pyplot as plt
 
 # local (controlbook)
 from case_studies import common, L_rodmass
-
-
+from case_studies.L_rodmass.equilibrium_controller import RodMassControllerEq as ControllerEq
 
 # Instantiate system and controller
 system = L_rodmass.Dynamics(alpha=0.0)  # no parameter uncertainty
@@ -21,14 +20,14 @@ reference = common.SignalGenerator(amplitude=0.0)  # zero reference
 # TODO: define the controller to use here (if you defined an equilibrium 
 # controller, use it here to verify equilibrium): 
 
-# controller = 
+controller = ControllerEq()
 
 # Run simulation
 time, x_hist, u_hist, r_hist, xhat_hist, *_ = common.run_simulation(
     system,
     [reference],
     controller,
-    controller_input="measurement",
+    controller_input="state",
     t_final=5.0,
     dt=L_rodmass.params.ts
 )
